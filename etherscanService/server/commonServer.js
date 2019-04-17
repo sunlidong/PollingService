@@ -1,5 +1,7 @@
 const Web3 = require('web3');
+var web3Server = require('../server/web3Server');
 
+web3Server.web3
 
 
 //

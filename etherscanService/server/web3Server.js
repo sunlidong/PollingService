@@ -9,10 +9,10 @@ const Web3 = require('web3');
 var Web3JS = {
     init_web3: () => {
         const url = "https://ropsten.infura.io/v3/ee23e77aa14846d88eb5cad3d59e37f2";
-        web3_sk = new Web3(new Web3.providers.HttpProvider(url));
+        let  web3_sk = new Web3(new Web3.providers.HttpProvider(url));
         console.log("web3=>", web3_sk.version);
         web3_sk.eth.defaultAccount = '0x38a8DC14edE1DEf9C437bB3647445eEec06fF105';
-
+        return  web3_sk;
     },
     getabitest: () => {
     },
@@ -34,6 +34,7 @@ var Web3JS = {
         // TODO:
         console.log("Token合约实例完成");
     }
+
 };
 
 //

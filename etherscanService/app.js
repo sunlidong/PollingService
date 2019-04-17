@@ -12,6 +12,7 @@ var queryEtherServer = require('./routes/queryEtherServer');
 var queryTokenServer = require('./routes/queryTokenServer');
 var listenBlocksTransactions = require('./routes/listenBlocksTransactions');
 var fabricServer = require('./routes/fabricServer');
+var dbServer = require('./routes/dbServer');
 
 //配置路由
 router.get('/',(ctx)=>{
@@ -37,6 +38,7 @@ router.use('/token',queryTokenServer);
 router.use('/listen',listenBlocksTransactions);
 
 router.use('/fabric',fabricServer);
+router.use('/db',dbServer);
 
 
 //
