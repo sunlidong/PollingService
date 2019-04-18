@@ -251,92 +251,99 @@ router.get('/initfMasterdata', async (ctx, next) => {
 //初始化 代币交易信息列表
 router.get('/initfTrandata', async (ctx, next) => {
     //
+    console.log("============================================================>initfTrandata");
 
+    //获取参数
     let uuid = uuidv4();
-    let data = model.fMasterdata;
-    console.log("data=>", data, uuid);
-    //data
-    data.fUUID = uuid;
-    data.fNo = 1;
-    data.fToken = 'drcToken';
-    data.fType = 3;
-    data.fIsListening = true;
+    let requestData = model.fTrandata;
+    console.log("============================================================data");
 
-    //
-    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafMasterdata, data);
-    // let result = await  funcMethodList(func.dbServer.fNo, func.dbServer.func.initData, a);
+    //拼接对象
+    requestData.fNo = 2;
+    requestData.fUUID = uuid;
+    requestData.fTpye = 1;
+    requestData.fMasterID = uuid;
+    requestData.fSelect = true;
+    requestData.fTime = '2019-04-18 13:34:23';
+    requestData.fFrom = '0x38a8DC14edE1DEf9C437bB3647445eEec06fF105';
+    requestData.fTo = '0xA9af645Ce31AF413b24a3b913f1a5Bf57A7a1C50';
+    requestData.fVlaue = '80000000';
+    requestData.fSize = '8';
+    requestData.fBlocknum = '49894323';
+    requestData.fBlockHash = '0xe11082ff379692fbad18a5f03430de7d611481685ba727920c8421a28f2a93a7';
+    requestData.fTransactionHash = '0x9f2460428f0ba4fe12dedc1f6c9557da0b3c6538a6e116e192b8922f9183a578';
 
-    // let result = mongodbServer.initDatabaseData();
-    // result
-    //     .then(res => {
-    //         console.log("res=>", res);
-    //     })
-    //     .catch(err => {
-    //         console.warn("err=>", err);
-    //
-    //     })
+    console.log("============================================================");
 
+    //请求业务函数
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafTrandata, requestData);
+
+    //返回调用
     ctx.body = result;
 });
 
 //初始化 代币交易信息详细表
 router.get('/initfTrandetaileddata', async (ctx, next) => {
+    console.log("============================================================>initfTrandetaileddata");
 
-    let a = "1";
+    //获取参数
     let uuid = uuidv4();
-    let data = model.fMasterdata;
-    console.log("data=>", data, uuid);
+    let data = model.fTrandetaileddata;
+
+
+    /*
+    *                     fTrandetaileddata: {
+                        fNo: 0,
+                        Block: {blockNumber: 0, blockHash: 0, blockIndex: 0, TransactionHash: 0},
+                        Row: {form: "", to: "", value: "", time: '', fabrichash: ''},
+                        Remark: {fText: " rmake"},
+                        Token: {fTokenName: '', fTokenUUID: '', fType: ''},
+                        Fcount: {fBlockNumber: '', fTime: '', fNo: ''},
+                        Fabric: {fHash: '', fID: ''},
+                        Drcc: {vip: 0, type: ''},
+                        fUNMB: {fNo: 0, fUUID: '', fTpye: 1, fMasterID: '', fBz: '', fSelect: true}
+                    },
+    * */
     //data
-    data.fUUID = uuid;
-    data.fNo = 1;
-    data.fToken = 'drcToken';
-    data.fType = 3;
-    data.fIsListening = true;
+    //拼接对象
+    data.fNo = 4593;
+    data.Block = {blockNumber: 4000000, blockHash: "0xe11082ff379692fbad18a5f03430de7d611481685ba727920c8421a28f2a93a7", blockIndex: 14, TransactionHash:"0x9f2460428f0ba4fe12dedc1f6c9557da0b3c6538a6e116e192b8922f9183a578" };
+    data.Row = {form: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105", to: "0xA9af645Ce31AF413b24a3b913f1a5Bf57A7a1C50", value: "30000000", time: '2019-04-18 13:23:34', fabrichash: 'sdf34jo3o4ij38fj23o4j2983j42'};
+    data.Remark = {fText: "我今天转给了张山18个以太币"};
+    data.Token = {fTokenName: 'drcc', fTokenUUID: uuid, fType: '2'};
+    data.Fcount = {fBlockNumber: '3498902034', fTime: '2019-01-21 18:23:19', fNo: '233'};
+    data.Fabric = {fHash: 'sdf34jo3o4ij38fj23o4j2983j42', fID: 'sdf34jo3o4ij38fj23o4j2983j42'};
+    data.Drcc = {vip: 1, type: '2'};
+    data.fUNMB = {fNo: 23243, fUUID: uuid, fTpye: 1, fMasterID: uuid, fBz: 'one good ', fSelect: true};
 
-    //
-    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafMasterdata, data);
-    // let result = await  funcMethodList(func.dbServer.fNo, func.dbServer.func.initData, a);
+    //请求业务函数
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafTrandetaileddata, data);
 
-    // let result = mongodbServer.initDatabaseData();
-    // result
-    //     .then(res => {
-    //         console.log("res=>", res);
-    //     })
-    //     .catch(err => {
-    //         console.warn("err=>", err);
-    //
-    //     })
-
+    //返回调用
     ctx.body = result;
 });
 
 //初始化 代币持有量排名表
 router.get('/initfRank', async (ctx, next) => {
-
-    let a = "1";
+    console.log("============================================================>initfRank");
+    //
     let uuid = uuidv4();
-    let data = model.fMasterdata;
-    console.log("data=>", data, uuid);
+    let data = model.fRank;
+
     //data
+    data.fNo = 30000;
+    data.fName = '张山';
+    data.fAddress = 'drcToken';
+    data.fHaveSum = 238923;
+    data.fTransactionSum = 3434;
+    data.fBz = '今天作下测试，排名测试';
+    data.fToken = 'drccS';
     data.fUUID = uuid;
-    data.fNo = 1;
-    data.fToken = 'drcToken';
-    data.fType = 3;
-    data.fIsListening = true;
 
     //
-    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafMasterdata, data);
-    // let result = await  funcMethodList(func.dbServer.fNo, func.dbServer.func.initData, a);
-
-    // let result = mongodbServer.initDatabaseData();
-    // result
-    //     .then(res => {
-    //         console.log("res=>", res);
-    //     })
-    //     .catch(err => {
-    //         console.warn("err=>", err);
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafRank, data);
     //
-    //     })
+
 
     ctx.body = result;
 });

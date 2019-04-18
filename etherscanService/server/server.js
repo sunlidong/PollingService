@@ -10,17 +10,17 @@ var funcquery = async (ftype, funcName, fdata) => {
     switch (ftype) {
         case func.queryToken:
             console.log(func.queryToken);
-        break;
-            case func.dbServer.fNo:
-            console.log("dbServer",func.dbServer);
+            break;
+        case func.dbServer.fNo:
+            console.log("============================================================dbServer=>", ftype);
             result = queryMethodMongodb(funcName, fdata);
             break;
         case func.fabricBlock:
             console.log(func.fabricBlock);
-        break;
-            case func.listenBlock:
+            break;
+        case func.listenBlock:
             console.log(func.listenBlock);
-        //
+            //
             break;
 
     }
@@ -39,7 +39,10 @@ var queryMethodToken = (funcName, fdata) => {
 
 var queryMethodMongodb = (funcName, fdata) => {
     //
-    console.log("queryMethodMongodb");
+    // console.log("queryMethodMongodb");
+    console.log("============================================================queryMethodMongodb=>", funcName);
+
+
     var result = '';
     switch (funcName) {
         case func.dbServer.func.initDatabaseData:
@@ -49,8 +52,7 @@ var queryMethodMongodb = (funcName, fdata) => {
             result = mongodbServer.init.initDatafMasterdata(fdata);
             break;
         case func.dbServer.func.initDatafTrandata:
-            break;
-            result = mongodbServer.init.initDatafMasterdata(fdata);
+            result = mongodbServer.init.initDatafTrandata(fdata);
             break;
         case func.dbServer.func.initDatafTrandetaileddata:
             result = mongodbServer.init.initDatafTrandetaileddata(fdata);
@@ -59,7 +61,7 @@ var queryMethodMongodb = (funcName, fdata) => {
             result = mongodbServer.init.initDatafRank(fdata);
             break;
         default:
-            result = { err:"no find funcname "};
+            result = {err: "no find funcname "};
     }
     return result;
 }

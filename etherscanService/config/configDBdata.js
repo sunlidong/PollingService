@@ -9,11 +9,11 @@ var datalist = {
         fIsListening: false
     },
     fTrandata: {
-        fNo: 394,
+        fNo: 0,
         fUUID: "",
         fTpye: 1,
-        fMasterID: "343",
-        fBz: "3434",
+        fMasterID: "",
+        fBz: "",
         fSelect: true,
         fTime: "",
         fFrom: "",
@@ -26,7 +26,7 @@ var datalist = {
     },
     fTrandetaileddata: {
         fNo: 0,
-        Block: {blockNumber: 0, blockHash: 0, blockIndex: 0, TransactionHash: 0},
+        Block: {blockNumber: 0, blockHash: '', blockIndex: '', TransactionHash: ''},
         Row: {form: "", to: "", value: "", time: '', fabrichash: ''},
         Remark: {fText: " rmake"},
         Token: {fTokenName: '', fTokenUUID: '', fType: ''},
