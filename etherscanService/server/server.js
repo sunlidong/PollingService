@@ -4,7 +4,6 @@ var mongodbServer = require('../server/mongodbServer');
 //
 var funcquery = async (ftype, funcType, funcName, fdata) => {
     //
-
     console.log("funcquery");
     var result;
     switch (ftype) {
@@ -42,7 +41,6 @@ var queryMethodMongodb = (funcType, funcName, fdata) => {
     // console.log("queryMethodMongodb");
     console.log("============================================================queryMethodMongodb=>", funcName);
 
-
     var result = '';
     switch (funcName) {
         case func.dbServer.func.initDatabaseData:
@@ -63,8 +61,24 @@ var queryMethodMongodb = (funcType, funcName, fdata) => {
         case func.dbServer.func.insertData:
             result = insertData(funcType, fdata);
             break;
+        //query
+        case func.dbServer.query.all:
+            result = queryData.all(funcType, fdata);
+            break;
+        case func.dbServer.query.time:
+            result = queryData.time(funcType, fdata);
+            break;
+        case func.dbServer.query.sort:
+            result = queryData.sort(funcType, fdata);
+            break;
+        case func.dbServer.query.skip:
+            result = queryData.skip(funcType, fdata);
+            break;
+        case func.dbServer.query.num:
+            result = queryData.num(funcType, fdata);
+            break;
         default:
-            result = {err: "no find funcname "};
+            result = {err: "no find funcname"};
     }
     return result;
 }
@@ -90,6 +104,119 @@ var insertData = (funcType, fdata) => {
             break;
     }
     return result;
+}
+
+
+//查询 函数
+var queryData = {
+    //
+    all: async (funcName, fdata) => {
+        let result;
+        switch (funcName) {
+            //
+            case func.dbServer.funcType.Master:
+                result = mongodbServer.query.all.master(fdata);
+                break;
+            case func.dbServer.funcType.fTran:
+                result = mongodbServer.query.all.fTran(fdata);
+                break;
+            case func.dbServer.funcType.fTrandetailed:
+                result = mongodbServer.query.all.fTrandetailed(fdata);
+                break;
+            case func.dbServer.funcType.Rank:
+                result = mongodbServer.query.all.rank(fdata);
+                break;
+            default:
+                result = {err: "no find func"}
+        }
+        return result;
+    },
+    time: async (funcName, fdata) => {
+        let result;
+        switch (funcName) {
+            //
+            case func.dbServer.funcType.Master:
+                result = insertData(funcName, fdata);
+                break;
+            case func.dbServer.funcType.fTran:
+                func = insertData(funcName, fdata);
+                break;
+            case func.dbServer.funcType.fTrandetailed:
+                result = insertData(funcName, fdata);
+                break;
+            case func.dbServer.funcType.Rank:
+                result = insertData(funcName, fdata);
+                break;
+            default:
+                result = {err: "no find func"}
+        }
+        return result;
+    },
+    sort: async (funcName, fdata) => {
+        let result;
+        switch (funcName) {
+            //
+            case func.dbServer.funcType.Master:
+                result = mongodbServer.query.sort.master(fdata);
+                break;
+            case func.dbServer.funcType.fTran:
+                result = mongodbServer.query.sort.fTran(fdata);
+                break;
+            case func.dbServer.funcType.fTrandetailed:
+                result = mongodbServer.query.sort.fTrandetailed(fdata);
+                break;
+            case func.dbServer.funcType.Rank:
+                result = mongodbServer.query.sort.rank(fdata);
+                break;
+            default:
+                result = {err: "no find func"}
+        }
+        return result;
+    },
+    skip: async (funcName, fdata) => {
+        let result;
+        switch (funcName) {
+            //
+            case func.funcServer.funcType.Master:
+                result = insertData(funcName, fdata);
+                break;
+            case func.funcServer.funcType.fTran:
+                result = insertData(funcName, fdata);
+                break;
+            case func.funcServer.funcType.fTrandetailed:
+                result = insertData(funcName, fdata);
+                break;
+            case func.funcServer.funcType.Rank:
+                result = insertData(funcName, fdata);
+                break;
+            default:
+                result = {err: "no find func"}
+        }
+        return result;
+    },
+    num: async (funcName, fdata) => {
+        let result;
+        switch (funcName) {
+            //
+            case func.dbServer.funcType.Master:
+                result = mongodbServer.query.num.master(fdata);
+                break;
+            case func.dbServer.funcType.fTran:
+                result = mongodbServer.query.num.fTran(fdata);
+                break;
+            case func.dbServer.funcType.fTrandetailed:
+                result = mongodbServer.query.num.fTrandetailed(fdata);
+                break;
+            case func.dbServer.funcType.Rank:
+                result = mongodbServer.query.num.rank(fdata);
+                break;
+            default:
+                result = {err: "no find func"}
+        }
+        return result;
+    }
+
+
 }
 
 //

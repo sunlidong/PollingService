@@ -401,6 +401,335 @@ var ActionMongoDB = {
             });
 
         }
+    },
+    query: {
+        all: {
+            master: (data) => {
+                //
+                return new Promise((resolve, reject) => {
+                    //
+                    MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                        //
+                        if (err) reject(err);
+
+                        const dbo = client.db(REQconfigDB.databaseName);
+                        const tablename = REQconfigDB.tableName.fMasterdata;
+
+                        //
+                        dbo.collection(tablename).find({}).toArray((err, result) => { // 返回集合中所有数据
+                            if (err) reject(err);
+                            console.log(result);
+                            client.close();
+                            resolve(result);
+                        });
+                    });
+                });
+
+
+            },
+            fTran: (data) => {
+                return new Promise((resolve, reject) => {
+                    //
+                    var arr = [];
+                    MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                        //
+                        if (err) reject(err);
+
+                        const dbo = client.db(REQconfigDB.databaseName);
+                        const tablename = REQconfigDB.tableName.fTrandata;
+
+
+                        //
+                        dbo.collection(tablename).find({}).toArray((err, result) => { // 返回集合中所有数据
+                            if (err) reject(err);
+                            console.log(result);
+                            client.close();
+                            resolve(result);
+                        });
+                    });
+                });
+            },
+            fTrandetailed: (data) => {
+                return new Promise((resolve, reject) => {
+                    //
+                    var arr = [];
+                    MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                        //
+                        if (err) reject(err);
+
+                        const dbo = client.db(REQconfigDB.databaseName);
+                        const tablename = REQconfigDB.tableName.fTrandetaileddata;
+
+                        dbo.collection(tablename).find({}).toArray((err, result) => { // 返回集合中所有数据
+                            if (err) reject(err);
+                            console.log(result);
+                            client.close();
+                            resolve(result);
+                        });
+                    });
+                });
+            },
+            rank: (data) => {
+                //
+                return new Promise((resolve, reject) => {
+                    //
+                    var arr = [];
+                    MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                        //
+                        if (err) reject(err);
+
+                        const dbo = client.db(REQconfigDB.databaseName);
+                        const tablename = REQconfigDB.tableName.fRank;
+
+
+                        //
+                        dbo.collection(tablename).find(data).toArray((err, result) => { // 返回集合中所有数据
+                            if (err) reject(err);
+                            console.log(result);
+                            client.close();
+                            resolve(result);
+                        });
+                        //
+                        // dbo.collection(tablename).find({}, (err, res) => {
+                        //     //
+                        //     if (err) reject(err);
+                        //     console.log("query is ok ",res);
+                        //     //
+                        //     res.each((err, doc) => {
+                        //         if (err) {
+                        //             reject(err);
+                        //             return;
+                        //         }
+                        //         if (doc != null) {
+                        //             arr.push(doc);
+                        //         } else {
+                        //             console.log(arr);
+                        //             //遍历完毕
+                        //         }
+                        //     });
+                        //     //
+                        //     client.close();
+                        //     resolve(arr);
+                        // });
+                    });
+                });
+            }
+        },
+        time: {
+            master: (data) => {
+            },
+            fTran: (data) => {
+            },
+            fTrandetailed: (data) => {
+            },
+            rank: (data) => {
+            }
+        },
+        sort: {
+            master: (data) => {
+                //
+                return new Promise((resolve, reject) => {
+                    //
+                    MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                        //
+                        if (err) reject(err);
+
+                        const dbo = client.db(REQconfigDB.databaseName);
+                        const tablename = REQconfigDB.tableName.fMasterdata;
+                        //
+                        dbo.collection(tablename).find({}).sort(data).limit(20).toArray((err, result) => { // 返回集合中所有数据
+                            if (err) reject(err);
+                            console.log(result);
+                            client.close();
+                            resolve(result);
+                        });
+                    });
+                });
+
+            },
+            fTran: (data) => {
+                //
+                return new Promise((resolve, reject) => {
+                    //
+                    MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                        //
+                        if (err) reject(err);
+
+                        const dbo = client.db(REQconfigDB.databaseName);
+                        const tablename = REQconfigDB.tableName.fTrandata;
+                        //
+                        dbo.collection(tablename).find({}).sort(data).limit(20).toArray((err, result) => { // 返回集合中所有数据
+                            if (err) reject(err);
+                            console.log(result);
+                            client.close();
+                            resolve(result);
+                        });
+                    });
+                });
+            },
+            fTrandetailed: (data) => {
+                //
+                return new Promise((resolve, reject) => {
+                    //
+                    MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                        //
+                        if (err) reject(err);
+
+                        const dbo = client.db(REQconfigDB.databaseName);
+                        const tablename = REQconfigDB.tableName.fTrandetaileddata;
+                        //
+                        dbo.collection(tablename).find({}).sort(data).limit(20).toArray((err, result) => { // 返回集合中所有数据
+                            if (err) reject(err);
+                            console.log(result);
+                            client.close();
+                            resolve(result);
+                        });
+                    });
+                });
+            },
+            rank: (data) => {
+                //
+                return new Promise((resolve, reject) => {
+                    //
+                    MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                        //
+                        if (err) reject(err);
+
+                        const dbo = client.db(REQconfigDB.databaseName);
+                        const tablename = REQconfigDB.tableName.fRank;
+                        //
+                        dbo.collection(tablename).find({}).sort(data).limit(20).toArray((err, result) => { // 返回集合中所有数据
+                            if (err) reject(err);
+                            console.log(result);
+                            client.close();
+                            resolve(result);
+                        });
+                    });
+                });
+            }
+        },
+        skip: {
+            master: (data) => {
+            },
+            fTran: (data) => {
+            },
+            fTrandetailed: (data) => {
+            },
+            rank: (data) => {
+            }
+        },
+        num: {
+            master: (data) => {
+                //
+                return new Promise((resolve, reject) => {
+                    //
+                    MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                        //
+                        if (err) reject(err);
+
+                        const dbo = client.db(REQconfigDB.databaseName);
+                        const tablename = REQconfigDB.tableName.fMasterdata;
+                        //
+                        dbo.collection(tablename).find({}).limit(3).toArray((err, result) => { // 返回集合中所有数据
+                            if (err) reject(err);
+                            console.log(result);
+                            client.close();
+                            resolve(result);
+                        });
+                    });
+                });
+            },
+            fTran: (data) => {
+                //
+                return new Promise((resolve, reject) => {
+                    //
+                    var arr = [];
+                    MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                        //
+                        if (err) reject(err);
+
+                        const dbo = client.db(REQconfigDB.databaseName);
+                        const tablename = REQconfigDB.tableName.fTrandata;
+
+
+                        //
+                        dbo.collection(tablename).find({}).limit(3).toArray((err, result) => { // 返回集合中所有数据
+                            if (err) reject(err);
+                            console.log(result);
+                            client.close();
+                            resolve(result);
+                        });
+                    });
+                });
+            },
+            fTrandetailed: (data) => {
+                //
+                return new Promise((resolve, reject) => {
+                    //
+                    var arr = [];
+                    MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                        //
+                        if (err) reject(err);
+
+                        const dbo = client.db(REQconfigDB.databaseName);
+                        const tablename = REQconfigDB.tableName.fTrandetaileddata;
+
+                        dbo.collection(tablename).find({}).limit(3).toArray((err, result) => { // 返回集合中所有数据
+                            if (err) reject(err);
+                            console.log(result);
+                            client.close();
+                            resolve(result);
+                        });
+                    });
+                });
+            },
+            rank: (data) => {
+
+                //
+                return new Promise((resolve, reject) => {
+                    //
+                    var arr = [];
+                    MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                        //
+                        if (err) reject(err);
+
+                        const dbo = client.db(REQconfigDB.databaseName);
+                        const tablename = REQconfigDB.tableName.fRank;
+
+
+                        //
+                        dbo.collection(tablename).find({}).limit(3).toArray((err, result) => { // 返回集合中所有数据
+                            if (err) reject(err);
+                            console.log(result);
+                            client.close();
+                            resolve(result);
+                        });
+                        //
+                        // dbo.collection(tablename).find({}, (err, res) => {
+                        //     //
+                        //     if (err) reject(err);
+                        //     console.log("query is ok ",res);
+                        //     //
+                        //     res.each((err, doc) => {
+                        //         if (err) {
+                        //             reject(err);
+                        //             return;
+                        //         }
+                        //         if (doc != null) {
+                        //             arr.push(doc);
+                        //         } else {
+                        //             console.log(arr);
+                        //             //遍历完毕
+                        //         }
+                        //     });
+                        //     //
+                        //     client.close();
+                        //     resolve(arr);
+                        // });
+                    });
+                });
+            }
+        }
     }
 }
 

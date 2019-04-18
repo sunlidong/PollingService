@@ -19,12 +19,21 @@ const funcList = {
             initDatafRank: "dbServer/initDatafRank",
             insertData: "dbServer/insertData"
         },
-        funcType:{
-            Master:"Master",
-            fTran:"fTran",
-            fTrandetailed:"fTrandetailed",
-            Rank:"Rank"
-        }
+        funcType: {
+            Master: "Master",
+            fTran: "fTran",
+            fTrandetailed: "fTrandetailed",
+            Rank: "Rank",
+            query: "query"
+        },
+        query: {
+            all: "query/all",
+            num: "query/num",
+            time: "query/time",
+            sort: "query/sort",
+            skip: "query/sort",
+            select: "query/sort"
+        },
     }
 }
 

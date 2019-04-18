@@ -376,10 +376,10 @@ router.get('/insertdata', async (ctx, next) => {
         data.fNo = 600000 + i;
         data.fName = '张山';
         data.fAddress = 'drcToken';
-        data.fHaveSum = 20000+i;
+        data.fHaveSum = 20000 + i;
         data.fTransactionSum = 3000;
         data.fBz = '今天作下测试，排名测试';
-        data.fToken = 'drccS'+i;
+        data.fToken = 'drccS' + i;
         data.fUUID = uuid;
         let result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.func.insertData, data);
         // let result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Master, func.dbServer.func.insertData, data);
@@ -390,6 +390,49 @@ router.get('/insertdata', async (ctx, next) => {
     }
 
     ctx.body = a;
+});
+
+
+/*查询数据
+*   1.  查询全部
+*   2.  查询范围
+*   3.  时间范围
+*   4.  排序范围
+*   5.  条数限制
+* */
+router.get('/querydata', async (ctx, next) => {
+    //
+    console.log("============================================================>querydata");
+
+    //post data
+    //todo
+    // var data = {"fNo": 51166}
+    let result;
+    // result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Master, func.dbServer.query.all, data);
+    // result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.fTran, func.dbServer.query.all, data);
+    // result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.fTrandetailed, func.dbServer.query.all, data);
+    // result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.query.all, data);
+
+
+    //查询前五条数据
+
+    // result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.query.num, data);
+    // result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.query.num, data);
+    // result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.query.num, data);
+    // result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.query.num, data);
+    // result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.query.num, data);
+    //
+
+
+    //排序查询 最高
+    var data = {"fNo": -1}
+    result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Master, func.dbServer.query.sort, data);
+    result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.fTran, func.dbServer.query.sort, data);
+    result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.fTrandetailed, func.dbServer.query.sort, data);
+    result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.query.sort, data);
+    ctx.body = result;
+
+
 });
 
 //
