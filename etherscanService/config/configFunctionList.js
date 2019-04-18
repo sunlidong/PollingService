@@ -16,7 +16,14 @@ const funcList = {
             initDatafMasterdata: "dbServer/initDatafMasterdata",
             initDatafTrandata: "dbServer/initDatafTrandata",
             initDatafTrandetaileddata: "dbServer/initDatafTrandetaileddata",
-            initDatafRank: "dbServer/initDatafRank"
+            initDatafRank: "dbServer/initDatafRank",
+            insertData: "dbServer/insertData"
+        },
+        funcType:{
+            Master:"Master",
+            fTran:"fTran",
+            fTrandetailed:"fTrandetailed",
+            Rank:"Rank"
         }
     }
 }

@@ -323,6 +323,84 @@ var ActionMongoDB = {
             });
 
         }
+    },
+    insert: {
+        //
+        insertfMasterdata: (data) => {
+            return new Promise((resolve, reject) => {
+                //
+                MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                    //
+                    if (err) reject(err);
+                    var dbo = client.db(REQconfigDB.databaseName);
+                    var initData = {dataBaselocalBlockNumber: 0, dataBaselocalTransationIndex: 0};
+                    dbo.collection(REQconfigDB.tableName.fMasterdata).insertOne(data, (err, res) => {
+                        //
+                        if (err) reject(err);
+                        console.log("Init database fMasterdata success.");
+                        client.close();
+                        resolve("insert is ok");
+                    });
+                });
+            });
+
+        },
+        insertfTrandata: (data) => {
+            return new Promise((resolve, reject) => {
+                //
+                MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                    //
+                    if (err) reject(err);
+                    var dbo = client.db(REQconfigDB.databaseName);
+                    var initData = {dataBaselocalBlockNumber: 0, dataBaselocalTransationIndex: 0};
+                    dbo.collection(REQconfigDB.tableName.fTrandata).insertOne(data, (err, res) => {
+                        //
+                        if (err) reject(err);
+                        console.log("Init database fTrandata success.");
+                        client.close();
+                        resolve("insert is ok");
+                    });
+                });
+            });
+
+        },
+        insertfTrandetaileddata: (data) => {
+            return new Promise((resolve, reject) => {
+                //
+                MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                    //
+                    if (err) reject(err);
+                    var dbo = client.db(REQconfigDB.databaseName);
+                    var initData = {dataBaselocalBlockNumber: 0, dataBaselocalTransationIndex: 0};
+                    dbo.collection(REQconfigDB.tableName.fTrandetaileddata).insertOne(data, (err, res) => {
+                        //
+                        if (err) reject(err);
+                        console.log("Init database fTrandetaileddata success.");
+                        client.close();
+                        resolve("insert is ok");
+                    });
+                });
+            });
+        },
+        insertfRank: (data) => {
+            return new Promise((resolve, reject) => {
+                //
+                MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser: true}, (err, client) => {
+                    //
+                    if (err) reject(err);
+                    var dbo = client.db(REQconfigDB.databaseName);
+                    var initData = {dataBaselocalBlockNumber: 0, dataBaselocalTransationIndex: 0};
+                    dbo.collection(REQconfigDB.tableName.fRank).insertOne(data, (err, res) => {
+                        //
+                        if (err) reject(err);
+                        console.log("Insert database fRank success.");
+                        client.close();
+                        resolve("insert is ok ");
+                    });
+                });
+            });
+
+        }
     }
 }
 

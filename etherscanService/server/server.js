@@ -2,7 +2,7 @@ var func = require('../config/configFunctionList');
 var mongodbServer = require('../server/mongodbServer');
 
 //
-var funcquery = async (ftype, funcName, fdata) => {
+var funcquery = async (ftype, funcType, funcName, fdata) => {
     //
 
     console.log("funcquery");
@@ -13,7 +13,7 @@ var funcquery = async (ftype, funcName, fdata) => {
             break;
         case func.dbServer.fNo:
             console.log("============================================================dbServer=>", ftype);
-            result = queryMethodMongodb(funcName, fdata);
+            result = queryMethodMongodb(funcType, funcName, fdata);
             break;
         case func.fabricBlock:
             console.log(func.fabricBlock);
@@ -37,7 +37,7 @@ var queryMethodToken = (funcName, fdata) => {
 }
 
 
-var queryMethodMongodb = (funcName, fdata) => {
+var queryMethodMongodb = (funcType, funcName, fdata) => {
     //
     // console.log("queryMethodMongodb");
     console.log("============================================================queryMethodMongodb=>", funcName);
@@ -60,12 +60,37 @@ var queryMethodMongodb = (funcName, fdata) => {
         case func.dbServer.func.initDatafRank:
             result = mongodbServer.init.initDatafRank(fdata);
             break;
+        case func.dbServer.func.insertData:
+            result = insertData(funcType, fdata);
+            break;
         default:
             result = {err: "no find funcname "};
     }
     return result;
 }
 
+var insertData = (funcType, fdata) => {
+    //
+    var result = '';
+    switch (funcType) {
+        case func.dbServer.funcType.Master:
+            result = mongodbServer.insert.insertfMasterdata(fdata);
+            break;
+        case func.dbServer.funcType.fTran:
+            result = mongodbServer.insert.insertfTrandata(fdata);
+            break;
+        case func.dbServer.funcType.fTrandetailed:
+            result = mongodbServer.insert.insertfTrandetaileddata(fdata);
+            break;
+        case func.dbServer.funcType.Rank:
+            result = mongodbServer.insert.insertfRank(fdata);
+            break;
+        default:
+            result = {err: "no find funcname "};
+            break;
+    }
+    return result;
+}
 
 //
 module.exports = funcquery;

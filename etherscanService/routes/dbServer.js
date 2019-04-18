@@ -201,7 +201,7 @@ router.get('/init', async (ctx, next) => {
     data.fIsListening = true;
 
     //
-    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafMasterdata, data);
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.func.initDatafMasterdata, data);
     // let result = await  funcMethodList(func.dbServer.fNo, func.dbServer.func.initData, a);
 
     // let result = mongodbServer.initDatabaseData();
@@ -232,7 +232,7 @@ router.get('/initfMasterdata', async (ctx, next) => {
     data.fIsListening = true;
 
     //
-    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafMasterdata, data);
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.func.initDatafMasterdata, data);
     // let result = await  funcMethodList(func.dbServer.fNo, func.dbServer.func.initData, a);
 
     // let result = mongodbServer.initDatabaseData();
@@ -276,7 +276,7 @@ router.get('/initfTrandata', async (ctx, next) => {
     console.log("============================================================");
 
     //请求业务函数
-    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafTrandata, requestData);
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.func.initDatafTrandata, requestData);
 
     //返回调用
     ctx.body = result;
@@ -307,8 +307,19 @@ router.get('/initfTrandetaileddata', async (ctx, next) => {
     //data
     //拼接对象
     data.fNo = 4593;
-    data.Block = {blockNumber: 4000000, blockHash: "0xe11082ff379692fbad18a5f03430de7d611481685ba727920c8421a28f2a93a7", blockIndex: 14, TransactionHash:"0x9f2460428f0ba4fe12dedc1f6c9557da0b3c6538a6e116e192b8922f9183a578" };
-    data.Row = {form: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105", to: "0xA9af645Ce31AF413b24a3b913f1a5Bf57A7a1C50", value: "30000000", time: '2019-04-18 13:23:34', fabrichash: 'sdf34jo3o4ij38fj23o4j2983j42'};
+    data.Block = {
+        blockNumber: 4000000,
+        blockHash: "0xe11082ff379692fbad18a5f03430de7d611481685ba727920c8421a28f2a93a7",
+        blockIndex: 14,
+        TransactionHash: "0x9f2460428f0ba4fe12dedc1f6c9557da0b3c6538a6e116e192b8922f9183a578"
+    };
+    data.Row = {
+        form: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+        to: "0xA9af645Ce31AF413b24a3b913f1a5Bf57A7a1C50",
+        value: "30000000",
+        time: '2019-04-18 13:23:34',
+        fabrichash: 'sdf34jo3o4ij38fj23o4j2983j42'
+    };
     data.Remark = {fText: "我今天转给了张山18个以太币"};
     data.Token = {fTokenName: 'drcc', fTokenUUID: uuid, fType: '2'};
     data.Fcount = {fBlockNumber: '3498902034', fTime: '2019-01-21 18:23:19', fNo: '233'};
@@ -317,7 +328,7 @@ router.get('/initfTrandetaileddata', async (ctx, next) => {
     data.fUNMB = {fNo: 23243, fUUID: uuid, fTpye: 1, fMasterID: uuid, fBz: 'one good ', fSelect: true};
 
     //请求业务函数
-    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafTrandetaileddata, data);
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.func.initDatafTrandetaileddata, data);
 
     //返回调用
     ctx.body = result;
@@ -331,7 +342,7 @@ router.get('/initfRank', async (ctx, next) => {
     let data = model.fRank;
 
     //data
-    data.fNo = 30000;
+    data.fNo = 30012;
     data.fName = '张山';
     data.fAddress = 'drcToken';
     data.fHaveSum = 238923;
@@ -341,11 +352,44 @@ router.get('/initfRank', async (ctx, next) => {
     data.fUUID = uuid;
 
     //
-    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafRank, data);
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.func.initDatafRank, data);
     //
 
 
     ctx.body = result;
+});
+
+
+/*写入数据
+*   1.路由对4类数据集写入MONGODB 中 4个参数
+* */
+router.get('/insertdata', async (ctx, next) => {
+    console.log("============================================================>initfRank");
+    //
+    var a = 'ok';
+    for (var i = 1; i < 1000; i++) {
+        var uuid = uuidv4();
+        var data = model.fRank;
+
+        //data
+        data._id = uuid;
+        data.fNo = 600000 + i;
+        data.fName = '张山';
+        data.fAddress = 'drcToken';
+        data.fHaveSum = 20000+i;
+        data.fTransactionSum = 3000;
+        data.fBz = '今天作下测试，排名测试';
+        data.fToken = 'drccS'+i;
+        data.fUUID = uuid;
+        let result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.func.insertData, data);
+        // let result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Master, func.dbServer.func.insertData, data);
+        // let result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.fTran, func.dbServer.func.insertData, data);
+        // let result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.fTrandetailed, func.dbServer.func.insertData, data);
+        // let result = await funcMethodList(func.dbServer.fNo, func.dbServer.funcType.Rank, func.dbServer.func.insertData, data);
+        console.log("==>", i);
+    }
+
+    ctx.body = a;
 });
 
 //

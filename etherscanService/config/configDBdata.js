@@ -36,6 +36,7 @@ var datalist = {
         fUNMB: {fNo: 0, fUUID: '', fTpye: 1, fMasterID: '', fBz: '', fSelect: true}
     },
     fRank:{
+        _id:'',
         fNo:0,
         fName:'',
         fAddress:'',
