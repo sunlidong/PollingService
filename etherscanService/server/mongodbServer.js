@@ -1,8 +1,9 @@
+const MongoClient = require('mongodb').MongoClient;
 
+/* 子模块 */
 var web3Server = require('../server/web3Server');
+var REQconfigDB = require('../config/configDB');
 var web3 = web3Server.init_web3();
-
-
 //
 var ActionMongoDB = {
     //
@@ -34,13 +35,13 @@ var ActionMongoDB = {
         //
         return new Promise((resolve, reject) => {
             //
-            MongoClient.connect(config.databaseUrl, (err, db) => {
+            MongoClient.connect(REQconfigDB.databaseUrl, (err, db) => {
                 if (err) reject(err);
                 //
-                var dbo = db.db(config.databaseName);
+                var dbo = db.db(REQconfigDB.databaseName);
 
                 // insert
-                dbo.collection(config.tableName).insertOne(response, (err, res) => {
+                dbo.collection(REQconfigDB.tableName).insertOne(response, (err, res) => {
                     //
                     if (err) reject(err);
                     console.log("Insert success! BlockNum: " + blockNum + ' index: ' + index);
@@ -53,19 +54,19 @@ var ActionMongoDB = {
     },
 
     //  初始化数据库，插入第一条数据，将dataBaselocalBlockNumber和dataBaselocalTransationIndex设为0
-    initDatabaseData: () => {
+    initDatabaseData: (data) => {
         return new Promise((resolve, reject) => {
             //
-            MongoClient.connect(config.databaseUrl, (err, db) => {
+            MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser:true}, (err, client) => {
                 //
                 if (err) reject(err);
-                var dbo = db.db(config.databaseName);
+                var dbo = client.db(REQconfigDB.databaseName);
                 var initData = {dataBaselocalBlockNumber: 0, dataBaselocalTransationIndex: 0};
-                dbo.collection(config.tableName).insertOne(initData, (err, res) => {
+                dbo.collection(REQconfigDB.tableName).insertOne(initData, (err, res) => {
                     //
                     if (err) reject(err);
                     console.log("Init database data success.");
-                    db.close();
+                    client.close();
                     resolve();
                 });
             });
@@ -77,11 +78,11 @@ var ActionMongoDB = {
         //
         return new Promise((resolve, reject) =>{
             //
-            MongoClient.connect(config.databaseUrl,(err,db)=>{
+            MongoClient.connect(REQconfigDB.databaseUrl,(err,db)=>{
                 //
                 if(err) reject(err);
                 //
-                var dbo = db.db(config.databaseName);
+                var dbo = db.db(REQconfigDB.databaseName);
                 //
                 var whereStr = {
                     dataBaselocalBlockNumber: {
@@ -94,7 +95,7 @@ var ActionMongoDB = {
                         dataBaselocalTransationIndex: transationIndex
                     }
                 };
-                dbo.collection(config.tableName).updateOne(whereStr,updateStr,(err,res)=>{
+                dbo.collection(REQconfigDB.tableName).updateOne(whereStr,updateStr,(err,res)=>{
                     //
                     if (err) reject(err);
 
@@ -114,11 +115,11 @@ var ActionMongoDB = {
         //
         return new Promise((resolve, reject) => {
             //
-            MongoClient.connect(config.databaseUrl,(err,db)=>{
+            MongoClient.connect(REQconfigDB.databaseUrl,(err,db)=>{
                 if (err)reject(err);
 
-                var dbo = db.db(config.databaseName);
-                dbo.collection(config.tableName).find({
+                var dbo = db.db(REQconfigDB.databaseName);
+                dbo.collection(REQconfigDB.tableName).find({
                     dataBaselocalBlockNumber:{
                         $exists: true
                     }
@@ -155,13 +156,13 @@ var ActionMongoDB = {
         //
         return new Promise((resolve, reject) => {
             //
-            MongoClient.connect(config.databaseUrl,(err,db)=>{
+            MongoClient.connect(REQconfigDB.databaseUrl,(err,db)=>{
                 //
                 if (err) reject(err);
                 //
-                var dbo = db.db(config.databaseName);
+                var dbo = db.db(REQconfigDB.databaseName);
 
-                dbo.collection(config.databaseName).find({
+                dbo.collection(REQconfigDB.databaseName).find({
                     //
                     dataBaselocalTransationIndex:{
                         //
@@ -198,10 +199,10 @@ var ActionMongoDB = {
         //
         return new Promise((resolve, reject) => {
             //
-            MongoClient.connect(config.databaseUrl,(err,db)=>{
+            MongoClient.connect(REQconfigDB.databaseUrl,(err,db)=>{
                 //
                 if (err) reject(err);
-                var dbo = db.db(config.databaseName);
+                var dbo = db.db(REQconfigDB.databaseName);
                 var whereStr = {
                     $or:[{
                         form:account
@@ -210,7 +211,7 @@ var ActionMongoDB = {
                     }]
                 };
                 //
-                dbo.collection(config.tableName).find(whereStr).toArray((err,result)=>{
+                dbo.collection(REQconfigDB.tableName).find(whereStr).toArray((err,result)=>{
                     //
                     if (err) reject(err);
                     //
@@ -222,6 +223,104 @@ var ActionMongoDB = {
                 });
             });
         });
+    },
+    init:{
+        initDatabaseData:(data)=>{
+            return new Promise((resolve, reject) => {
+                //
+                MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser:true}, (err, client) => {
+                    //
+                    if (err) reject(err);
+                    var dbo = client.db(REQconfigDB.databaseName);
+                    var initData = {dataBaselocalBlockNumber: 0, dataBaselocalTransationIndex: 0};
+                    dbo.collection(REQconfigDB.tableName).insertOne(initData, (err, res) => {
+                        //
+                        if (err) reject(err);
+                        console.log("Init database data success.");
+                        client.close();
+                        resolve();
+                    });
+                });
+            });
+
+        },
+
+        //
+        initDatafMasterdata:(data)=>{
+            return new Promise((resolve, reject) => {
+                //
+                MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser:true}, (err, client) => {
+                    //
+                    if (err) reject(err);
+                    var dbo = client.db(REQconfigDB.databaseName);
+                    dbo.collection(REQconfigDB.tableName.fMasterdata).insertOne(data, (err, res) => {
+                        //
+                        if (err) reject(err);
+                        console.log("Init database fMasterdata data success.");
+                        client.close();
+                        resolve();
+                    });
+                });
+            });
+
+        },
+        initDatafTrandata:(data)=>{
+            return new Promise((resolve, reject) => {
+                //
+                MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser:true}, (err, client) => {
+                    //
+                    if (err) reject(err);
+                    var dbo = client.db(REQconfigDB.databaseName);
+                    var initData = {dataBaselocalBlockNumber: 0, dataBaselocalTransationIndex: 0};
+                    dbo.collection(REQconfigDB.tableName).insertOne(initData, (err, res) => {
+                        //
+                        if (err) reject(err);
+                        console.log("Init database data success.");
+                        client.close();
+                        resolve();
+                    });
+                });
+            });
+
+        },
+        initDatafTrandetaileddata:(data)=>{
+            return new Promise((resolve, reject) => {
+                //
+                MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser:true}, (err, client) => {
+                    //
+                    if (err) reject(err);
+                    var dbo = client.db(REQconfigDB.databaseName);
+                    var initData = {dataBaselocalBlockNumber: 0, dataBaselocalTransationIndex: 0};
+                    dbo.collection(REQconfigDB.tableName.fMasterdata).insertOne(initData, (err, res) => {
+                        //
+                        if (err) reject(err);
+                        console.log("Init database data success.");
+                        client.close();
+                        resolve();
+                    });
+                });
+            });
+
+        },
+        initDatafRank:(data)=>{
+            return new Promise((resolve, reject) => {
+                //
+                MongoClient.connect(REQconfigDB.databaseUrl, {useNewUrlParser:true}, (err, client) => {
+                    //
+                    if (err) reject(err);
+                    var dbo = client.db(REQconfigDB.databaseName);
+                    var initData = {dataBaselocalBlockNumber: 0, dataBaselocalTransationIndex: 0};
+                    dbo.collection(REQconfigDB.tableName).insertOne(initData, (err, res) => {
+                        //
+                        if (err) reject(err);
+                        console.log("Init database data success.");
+                        client.close();
+                        resolve();
+                    });
+                });
+            });
+
+        }
     }
 }
 

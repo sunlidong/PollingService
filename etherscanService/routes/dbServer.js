@@ -1,9 +1,11 @@
 const router = require('koa-router')();
-
+const uuidv4 = require('uuid/v4');
 
 //
 var mongodbServer = require('../server/mongodbServer');
-
+var func = require('../config/configFunctionList');
+var funcMethodList = require('../server/server');
+var model = require('../config/configDBdata');
 
 
 //
@@ -21,27 +23,27 @@ router.post('/add', async (ctx) => {
 });
 
 //
-router.get('/',async(ctx,next)=>{
+router.get('/', async (ctx, next) => {
     //
-    if (!ctx.request.query.account){
+    if (!ctx.request.query.account) {
         //
         ctx.body = await Promise.resolve({
-            code:20002,
-            data:{},
-            message:'address'
+            code: 20002,
+            data: {},
+            message: 'address'
         });
     }
     //
-    var transations = await  mongodbServer.queryAccountTransationData(ctx.request.query.account);
-    ctx.body = await  Promise.resolve({
-        code:1000,
-        transations:transations,
-        message:'ok',
+    var transations = await mongodbServer.queryAccountTransationData(ctx.request.query.account);
+    ctx.body = await Promise.resolve({
+        code: 1000,
+        transations: transations,
+        message: 'ok',
     });
 });
 
 //
-router.get('/newblock',async(ctx,next)=>{
+router.get('/newblock', async (ctx, next) => {
     //
     // if (!ctx.request.query.account){
     //     //
@@ -52,7 +54,7 @@ router.get('/newblock',async(ctx,next)=>{
     //     // });
     // }
     //
-    var transations = await  mongodbServer.getPrevBlockNum();
+    var transations = await mongodbServer.getPrevBlockNum();
     // ctx.body = await  Promise.resolve({
     //     code:1000,
     //     transations:transations,
@@ -62,18 +64,18 @@ router.get('/newblock',async(ctx,next)=>{
 });
 
 //
-router.get('/transation/syncTransations',async (ctx,next)=>{
+router.get('/transation/syncTransations', async (ctx, next) => {
     //
     //todo
 // 01. 防止重复请求重复同步
 // 02. 如果数据库中不存在本地区块号，先初始化数据库区块号数据
     console.log('=====> Checking database data has init?');
-    var localBlockNumber = await  mongodbServer.getLatestLocalBlockNum();
-    if (localBlockNumber == 0){
+    var localBlockNumber = await mongodbServer.getLatestLocalBlockNum();
+    if (localBlockNumber == 0) {
         //
         console.log('The local blockNum in the database does not exist.');
         await mongodbServer.initDatabaseData();
-    }else{
+    } else {
         //
         console.log('The database data has already init before.');
     }
@@ -82,15 +84,15 @@ router.get('/transation/syncTransations',async (ctx,next)=>{
     //判断上一次本地最新区块下的交易是否同步完成，若未完成，先同步完该区块交易
     console.log('============================================================');
     console.log('=====> Checking last local block transations has complete sync?');
-    var transactionCount = await  mongodbServer.getBlockTransactionCounts(localBlockNumber);
+    var transactionCount = await mongodbServer.getBlockTransactionCounts(localBlockNumber);
     console.log('localBlockNumber[' + localBlockNumber + ']' + ' transactionCount on mainNet is ' + transactionCount);
 
-    if (transactionCount == 0){
+    if (transactionCount == 0) {
         console.log('Block ' + localBlockNumber + ' has no transation data.');
-    }else{
+    } else {
         //
         // 如果有，判断是否需要继续同步
-        if ((transactionCount-1)>await mongodbServer.getLatestLocalTransationIndex()){
+        if ((transactionCount - 1) > await mongodbServer.getLatestLocalTransationIndex()) {
             //
             console.log('Not all of transations, Continue sync block transations... ...');
 
@@ -99,15 +101,15 @@ router.get('/transation/syncTransations',async (ctx,next)=>{
             //
 
             //从最后一条交易记录的下一条开始获取并插入
-            for (var i=(await mongodbServer.getLatestLocalTransationIndex()+1);i<transactionCount;i++){
+            for (var i = (await mongodbServer.getLatestLocalTransationIndex() + 1); i < transactionCount; i++) {
                 //
-                await web3.eth.getTransactionFromBlock(localBlockNumber,i)
-                    .then(async response=>{
+                await web3.eth.getTransactionFromBlock(localBlockNumber, i)
+                    .then(async response => {
                         //
                         // 插入交易数据
-                        await  mongodbServer.insertTransationData(response,localBlockNumber,i);
+                        await mongodbServer.insertTransationData(response, localBlockNumber, i);
                         // 更新数据库的dataBaselocalBlockNumber和dataBaselocalTransationIndex
-                        await mongodbServer.updateDataBaselocalBlockNumber(localBlockNumber,i);
+                        await mongodbServer.updateDataBaselocalBlockNumber(localBlockNumber, i);
 
                         //
                         console.log(moment().format('LLLL'));
@@ -117,7 +119,7 @@ router.get('/transation/syncTransations',async (ctx,next)=>{
             console.log('Complete sync block ' +
                 localBlockNumber + ' of ' + transactionCount + ' transations.');
             tools.isSync = false;
-        }else{
+        } else {
             //
             console.log('No need sync.Local block has full of ' + transactionCount + ' transations.');
         }
@@ -135,7 +137,7 @@ router.get('/transation/syncTransations',async (ctx,next)=>{
     var blockTransactionCount;
 
     //
-    while (await mongodbServer.getPrevBlockNum()>await mongodbServer.getLatestLocalBlockNum()){
+    while (await mongodbServer.getPrevBlockNum() > await mongodbServer.getLatestLocalBlockNum()) {
         //
         console.log('Not the latested, Prepare Sync......');
 
@@ -147,27 +149,27 @@ router.get('/transation/syncTransations',async (ctx,next)=>{
         //
         //
         // 判断区块内是否包含交易，如果为0，只需要更新下数据库的区块号
-        if (blockTransactionCount ==0){
+        if (blockTransactionCount == 0) {
             //
             console.log('Block ' + nextLocalBlockNumber + ' has no transation data.');
 
-            await  mongodbServer.updateDataBaselocalBlockNumber(nextLocalBlockNumber,0);
+            await mongodbServer.updateDataBaselocalBlockNumber(nextLocalBlockNumber, 0);
 
-        }else{
+        } else {
             //
             console.log('Block ' + nextLocalBlockNumber + ' isSyncing......');
 
             // 获取该区块下的交易数据
 
-            for (var i = 0;i<blockTransactionCount;i++){
+            for (var i = 0; i < blockTransactionCount; i++) {
                 //
-                await  web3.eth.getTransactionFromBlock(nextLocalBlockNumber,i)
-                    .then(async response=>{
+                await web3.eth.getTransactionFromBlock(nextLocalBlockNumber, i)
+                    .then(async response => {
                         //
                         // 插入交易数据
-                        await mongodbServer.insertTransationData(response,nextLocalBlockNumber,i);
+                        await mongodbServer.insertTransationData(response, nextLocalBlockNumber, i);
                         // 更新数据库的dataBaselocalBlockNumber和dataBaselocalTransationIndex
-                        await mongodbServer.updateDataBaselocalBlockNumber(nextLocalBlockNumber,i);
+                        await mongodbServer.updateDataBaselocalBlockNumber(nextLocalBlockNumber, i);
 
                         console.log(moment().form('LLLL'));
                     });
@@ -184,7 +186,160 @@ router.get('/transation/syncTransations',async (ctx,next)=>{
 
 });
 
+// 初始化数据库
+router.get('/init', async (ctx, next) => {
 
+    let a = "1";
+    let uuid = uuidv4();
+    let data = model.fMasterdata;
+    console.log("data=>", data, uuid);
+    //data
+    data.fUUID = uuid;
+    data.fNo = 1;
+    data.fToken = 'drcToken';
+    data.fType = 3;
+    data.fIsListening = true;
+
+    //
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafMasterdata, data);
+    // let result = await  funcMethodList(func.dbServer.fNo, func.dbServer.func.initData, a);
+
+    // let result = mongodbServer.initDatabaseData();
+    // result
+    //     .then(res => {
+    //         console.log("res=>", res);
+    //     })
+    //     .catch(err => {
+    //         console.warn("err=>", err);
+    //
+    //     })
+
+    ctx.body = result;
+});
+
+//初始化 代币信息主表
+router.get('/initfMasterdata', async (ctx, next) => {
+
+    let a = "1";
+    let uuid = uuidv4();
+    let data = model.fMasterdata;
+    console.log("data=>", data, uuid);
+    //data
+    data.fUUID = uuid;
+    data.fNo = 1;
+    data.fToken = 'drcToken';
+    data.fType = 3;
+    data.fIsListening = true;
+
+    //
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafMasterdata, data);
+    // let result = await  funcMethodList(func.dbServer.fNo, func.dbServer.func.initData, a);
+
+    // let result = mongodbServer.initDatabaseData();
+    // result
+    //     .then(res => {
+    //         console.log("res=>", res);
+    //     })
+    //     .catch(err => {
+    //         console.warn("err=>", err);
+    //
+    //     })
+
+    ctx.body = result;
+});
+
+//初始化 代币交易信息列表
+router.get('/initfTrandata', async (ctx, next) => {
+    //
+
+    let uuid = uuidv4();
+    let data = model.fMasterdata;
+    console.log("data=>", data, uuid);
+    //data
+    data.fUUID = uuid;
+    data.fNo = 1;
+    data.fToken = 'drcToken';
+    data.fType = 3;
+    data.fIsListening = true;
+
+    //
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafMasterdata, data);
+    // let result = await  funcMethodList(func.dbServer.fNo, func.dbServer.func.initData, a);
+
+    // let result = mongodbServer.initDatabaseData();
+    // result
+    //     .then(res => {
+    //         console.log("res=>", res);
+    //     })
+    //     .catch(err => {
+    //         console.warn("err=>", err);
+    //
+    //     })
+
+    ctx.body = result;
+});
+
+//初始化 代币交易信息详细表
+router.get('/initfTrandetaileddata', async (ctx, next) => {
+
+    let a = "1";
+    let uuid = uuidv4();
+    let data = model.fMasterdata;
+    console.log("data=>", data, uuid);
+    //data
+    data.fUUID = uuid;
+    data.fNo = 1;
+    data.fToken = 'drcToken';
+    data.fType = 3;
+    data.fIsListening = true;
+
+    //
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafMasterdata, data);
+    // let result = await  funcMethodList(func.dbServer.fNo, func.dbServer.func.initData, a);
+
+    // let result = mongodbServer.initDatabaseData();
+    // result
+    //     .then(res => {
+    //         console.log("res=>", res);
+    //     })
+    //     .catch(err => {
+    //         console.warn("err=>", err);
+    //
+    //     })
+
+    ctx.body = result;
+});
+
+//初始化 代币持有量排名表
+router.get('/initfRank', async (ctx, next) => {
+
+    let a = "1";
+    let uuid = uuidv4();
+    let data = model.fMasterdata;
+    console.log("data=>", data, uuid);
+    //data
+    data.fUUID = uuid;
+    data.fNo = 1;
+    data.fToken = 'drcToken';
+    data.fType = 3;
+    data.fIsListening = true;
+
+    //
+    let result = await funcMethodList(func.dbServer.fNo, func.dbServer.func.initDatafMasterdata, data);
+    // let result = await  funcMethodList(func.dbServer.fNo, func.dbServer.func.initData, a);
+
+    // let result = mongodbServer.initDatabaseData();
+    // result
+    //     .then(res => {
+    //         console.log("res=>", res);
+    //     })
+    //     .catch(err => {
+    //         console.warn("err=>", err);
+    //
+    //     })
+
+    ctx.body = result;
+});
 
 //
 module.exports = router.routes();
