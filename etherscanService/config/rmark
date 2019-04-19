@@ -1,0 +1,34 @@
+db.fMasterdata.find();
+db.fMasterdata.find();
+
+                db.fMasterdata.find();
+                db.fTrandata.find();
+                db.fTrandetaileddata.find();
+                db.fRank.find();
+
+
+                    fTrandetaileddata: {
+                        fNo: 0,
+                        Block: {blockNumber: 0, blockHash: 0, blockIndex: 0, TransactionHash: 0},
+                        Row: {form: "", to: "", value: "", time: '', fabrichash: ''},
+                        Remark: {fText: " rmake"},
+                        Token: {fTokenName: '', fTokenUUID: '', fType: ''},
+                        Fcount: {fBlockNumber: '', fTime: '', fNo: ''},
+                        Fabric: {fHash: '', fID: ''},
+                        Drcc: {vip: 0, type: ''},
+                        fUNMB: {fNo: 0, fUUID: '', fTpye: 1, fMasterID: '', fBz: '', fSelect: true}
+                    },
+
+                    //
+                    var MongoClient = require('mongodb').MongoClient;
+                    var url = "mongodb://localhost:27017/";
+
+                    MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
+                        if (err) throw err;
+                        var dbo = db.db("runoob");
+                        dbo.collection("site"). find({}).toArray(function(err, result) { // 返回集合中所有数据
+                            if (err) throw err;
+                            console.log(result);
+                            db.close();
+                        });
+                    });
